@@ -10,20 +10,27 @@ Use Publicly Available data to create an interactive application explaining the 
 ```python
 # Step 1: Clone the repo
 git clone https://github.com/LNshuti/metals-trade.git
+```
 
+```python
 # Step 2: Create an isolated environment to manage dependencies
 conda env create --file=environment.yaml
 
 # Step 3: install required Python packages
-
 pip install -r requirements.txt
+```
 
+```python
 # Step 4: Inspect the data
 $ datasette .\data\processed\rankings.db
+```
 
+```python
 # Step 5: Run Python Application
 $ streamlit run app.py
+```
 
+```python
 # Step 5: Deploy Flask Application with Modal 
 $ modal serve app.py
 ```
