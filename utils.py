@@ -17,8 +17,8 @@ def write_to_sqlite(rankings_df, db_path):
     conn.close()
 
 # File paths
-file_path = '/data/rankings.dta'
-db_path = '/data/processed/rankings.db'
+file_path = 'data/rankings.dta'
+db_path = 'data/processed/rankings.db'
 
 # Load the rankings file
 rankings_df = load_rankings(file_path)
