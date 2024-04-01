@@ -1,1 +1,6 @@
 pages/
+data/*.dta
+data/*.zip
+data/*.json
+data/*.csv
+data/hs92_proximities.csv
