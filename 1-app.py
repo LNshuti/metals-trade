@@ -32,8 +32,8 @@ chart.animate(data)
 chart.feature("tooltip", True)
 
 # Define contrasting colors for African and non-African countries
-african_color = "#1c9761FF" # Green for African countries
-non_african_color = "#875792FF" # Purple for non-African countries
+african_color = "#cc815c" # Green for African countries
+non_african_color = "#343f5e" # Purple for non-African countries
 
 # Configure the chart to display Gross Export by country with different colors
 chart.animate(
@@ -49,14 +49,14 @@ chart.animate(
         {
             "plot": {
                 "xAxis": {"label": {"numberScale": "shortScaleSymbolUS"}},
-    #             "marker": {
-    #                 "color": f"if(IsAfrican, '{african_color}', '{non_african_color}')",
-    #                 "label": {
-    #                     "numberFormat": "prefixed",
-    #                     "maxFractionDigits": "1",
-    #                     "numberScale": "shortScaleSymbolUS",
-    #                 },
-    #             },
+                "marker": {
+                    # "color": f"if(IsAfrican, '{african_color}', '{non_african_color}')",
+                    "label": {
+                        "numberFormat": "prefixed",
+                        "maxFractionDigits": "1",
+                        "numberScale": "shortScaleSymbolUS",
+                    },
+                },
                 "paddingLeft": "12em",
             }
         }
