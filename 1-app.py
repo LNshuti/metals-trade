@@ -5,6 +5,9 @@ from streamlit_vizzu import Config, Data, Style, VizzuChart
 # Load the dataset
 df = pd.read_csv("data/Where did Africa export Metals to in 2021_.csv")
 
+# Rename Name to Country
+df.rename(columns={'Name': 'Country'}, inplace=True)
+
 # List of African countries as of my last training data in April 2023
 african_countries_list = [
     'Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi', 'Cabo Verde',
@@ -18,7 +21,7 @@ african_countries_list = [
 ]
 
 # # Add a column to the dataframe to indicate if the country is African.
-df['IsAfrican'] = [country_name in african_countries_list for country_name in df['Name']]
+df['IsAfrican'] = [country_name in african_countries_list for country_name in df['Country']]
 
 # Create a Color column defined as follows: 
 african_color = "#1c9761FF" # Green for African countries
@@ -36,7 +39,7 @@ data.add_df(df)
 
 chart = VizzuChart(key="vizzu", height=800)
 chart.animate(data)
-chart.feature("tooltip", False)
+chart.feature("tooltip", True)
 
 # Define contrasting colors for African and non-African countries
 
@@ -45,7 +48,7 @@ chart.animate(
     Config(
         {
             "x": "Gross Export",
-            "y": "Name",
+            "y": "Country",
             #"color": "Color",
             "title": "Africa's Metal Exports in 2021",
             "sort": "byValue",
