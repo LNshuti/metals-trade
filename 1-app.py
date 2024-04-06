@@ -5,8 +5,24 @@ from streamlit_vizzu import Config, Data, Style, VizzuChart
 # Load the dataset
 df = pd.read_csv("data/Where did Africa export Metals to in 2021_.csv")
 
+# List of African countries as of my last training data in April 2023
+african_countries_list = [
+    'Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi', 'Cabo Verde',
+    'Cameroon', 'Central African Republic', 'Chad', 'Comoros', 'Congo', 'Djibouti', 'Egypt',
+    'Equatorial Guinea', 'Eritrea', 'Eswatini', 'Ethiopia', 'Gabon', 'Gambia', 'Ghana',
+    'Guinea', 'Guinea-Bissau', 'Ivory Coast', 'Kenya', 'Lesotho', 'Liberia', 'Libya',
+    'Madagascar', 'Malawi', 'Mali', 'Mauritania', 'Mauritius', 'Morocco', 'Mozambique',
+    'Namibia', 'Niger', 'Nigeria', 'Rwanda', 'Sao Tome and Principe', 'Senegal', 'Seychelles',
+    'Sierra Leone', 'Somalia', 'South Africa', 'South Sudan', 'Sudan', 'Tanzania', 'Togo',
+    'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe'
+]
+
+# # Add a column to the dataframe to indicate if the country is African.
+df['IsAfrican'] = [country_name in african_countries_list for country_name in df['Name']]
+
 # Keep the top 20 by export
 df = df.nlargest(20, 'Gross Export')
+print(df.head())
 
 data = Data()
 data.add_df(df)
@@ -15,10 +31,11 @@ chart = VizzuChart(key="vizzu", height=600)
 chart.animate(data)
 chart.feature("tooltip", True)
 
-# Since the dataset does not contain a time series, we'll not use a slider for year selection
-# Instead, we can focus on visualizing the Gross Export and Share data
+# Define contrasting colors for African and non-African countries
+african_color = "#1c9761FF" # Green for African countries
+non_african_color = "#875792FF" # Purple for non-African countries
 
-# Configure the chart to display Gross Export by country
+# Configure the chart to display Gross Export by country with different colors
 chart.animate(
     Config(
         {
@@ -32,18 +49,15 @@ chart.animate(
         {
             "plot": {
                 "xAxis": {"label": {"numberScale": "shortScaleSymbolUS"}},
-                "marker": {
-                    "colorPalette": (
-                        "#b74c20FF #c47f58FF #1c9761FF #ea4549FF #875792FF #3562b6FF "
-                        "#ee7c34FF #efae3aFF"
-                    ),
-                    "label": {
-                        "numberFormat": "prefixed",
-                        "maxFractionDigits": "1",
-                        "numberScale": "shortScaleSymbolUS",
-                    },
-                },
-                "paddingLeft": "8em",
+    #             "marker": {
+    #                 "color": f"if(IsAfrican, '{african_color}', '{non_african_color}')",
+    #                 "label": {
+    #                     "numberFormat": "prefixed",
+    #                     "maxFractionDigits": "1",
+    #                     "numberScale": "shortScaleSymbolUS",
+    #                 },
+    #             },
+                "paddingLeft": "12em",
             }
         }
     ),
