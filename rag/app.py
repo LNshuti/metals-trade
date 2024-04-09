@@ -1,8 +1,10 @@
 # create a streamlit rag chatbot to interact with the document index 
 # Use an Anthropic Agent over RAG pipeline 
 
-# TODO: Implement Reranking and evaluation 
-# Track metrics and use for optimization 
+# TODO: 
+# 1. Convert code to Streamlit application
+# 2. Implement Reranking and evaluation 
+# 3. Track metrics and use for optimization 
 
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
