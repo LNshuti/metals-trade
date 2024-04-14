@@ -5,3 +5,6 @@ data/*.csv
 data/hs92_proximities.csv
 rag/data/
 rag/eval_testing.ipynb
+rag/_evaluations.json
+rag/rag_evaluator_pack/
+rag/benchmark.csv
