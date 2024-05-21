@@ -1,76 +1,88 @@
-import pandas as pd
 import streamlit as st
-from streamlit_vizzu import Config, Data, Style, VizzuChart
+from groq import Groq
+import pdfplumber
 
-# Load the dataset
-df = pd.read_csv("data/Where did Africa export Metals to in 2021_.csv")
+# Get the Groq API key from Streamlit secrets
+api_key = st.secrets["groq"]["api_key"]
 
-# Rename Name to Country
-df.rename(columns={'Name': 'Country'}, inplace=True)
+client = Groq(api_key=api_key)
+# import necessary libraries for colbert method
 
-# List of African countries as of my last training data in April 2023
-african_countries_list = [
-    'Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi', 'Cabo Verde',
-    'Cameroon', 'Central African Republic', 'Chad', 'Comoros', 'Congo', 'Djibouti', 'Egypt',
-    'Equatorial Guinea', 'Eritrea', 'Eswatini', 'Ethiopia', 'Gabon', 'Gambia', 'Ghana',
-    'Guinea', 'Guinea-Bissau', 'Ivory Coast', 'Kenya', 'Lesotho', 'Liberia', 'Libya',
-    'Madagascar', 'Malawi', 'Mali', 'Mauritania', 'Mauritius', 'Morocco', 'Mozambique',
-    'Namibia', 'Niger', 'Nigeria', 'Rwanda', 'Sao Tome and Principe', 'Senegal', 'Seychelles',
-    'Sierra Leone', 'Somalia', 'South Africa', 'South Sudan', 'Sudan', 'Tanzania', 'Togo',
-    'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe'
-]
+# Load and convert document into embeddings
+doc_path = "documents\\critical-minerals-africa-senior-study-group-final-report.pdf"
 
-# # Add a column to the dataframe to indicate if the country is African.
-df['IsAfrican'] = [country_name in african_countries_list for country_name in df['Country']]
+# Create Streamlit app
+st.title("Ultra-Fast Document Chatbot")
+st.header("Executive Summary")
+# Generate and display TLDR summary
+client = Groq(api_key="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")
 
-# Create a Color column defined as follows: 
-african_color = "#1c9761FF" # Green for African countries
-non_african_color = "#875792FF" # Purple for non-African countries
+# Load the document content
 
-# Add a column to the dataframe to indicate the color based on whether the country is African or not
-df['Color'] = df['IsAfrican'].map({True: african_color, False: non_african_color})
+@st.cache_data
+def get_text_from_pdf(file_path):
+    text = ""
+    with pdfplumber.open(file_path) as pdf:
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
 
-# Keep the top 20 by export
-df = df.nlargest(20, 'Gross Export')
-print(df.head(20))
+doc_content = get_text_from_pdf(doc_path)
 
-data = Data()
-data.add_df(df)
-
-chart = VizzuChart(key="vizzu", height=800)
-chart.animate(data)
-chart.feature("tooltip", True)
-
-# Define contrasting colors for African and non-African countries
-
-# Configure the chart to display Gross Export by country with different colors
-chart.animate(
-    Config(
+summary_completion = client.chat.completions.create(
+    model="gemma-7b-it",
+    messages=[
         {
-            "x": "Gross Export",
-            "y": "Country",
-            #"color": "Color",
-            "title": "Africa's Metal Exports in 2021",
-            "sort": "byValue",
-        }
-    ),
-    Style(
+            "role": "user",
+            "content": "Summarize this long document"
+        },
         {
-            "plot": {
-                "xAxis": {"label": {"numberScale": "shortScaleSymbolUS"}},
-                "marker": {
-                    "label": {
-                        "numberFormat": "prefixed",
-                        "maxFractionDigits": "1",
-                        "numberScale": "shortScaleSymbolUS",
-                    },
-                },
-                "paddingLeft": "12em",
-            },
-         
+            "role": "assistant",
+            "content": f"Load the document from {doc_path} and summarize it"
         }
-    ),
-    delay="0", x={"easing": "linear"},
+    ],
+    temperature=1,
+    max_tokens=1024,
+    top_p=1,
+    stream=True,
+    stop=None,
 )
+summary = ""
+for chunk in summary_completion:
+    summary += chunk.choices[0].delta.content or ""
+st.write(summary)
 
-chart.show()
+# Implement chat interface
+st.header("Chat with the Document")
+user_input = st.text_input("Your question")
+suggestions = ["What is the primary concern of the US regarding critical minerals?", 
+               "Why are critical minerals important for modern economies?", 
+               "What role does Africa play in the global supply chain of critical minerals?",
+               "What challenges are associated with mining critical minerals in Africa?", 
+               "What are the recommendations made by the study group to address the challenges in critical mineral supply chains?",
+               "How does the reliance on critical minerals imports affect U.S. national security?", 
+               "What actions are suggested to strengthen US-Africa partnerships in critical minerals?", 
+               "What impact does the extraction of critical minerals have on local communities in Africa?", 
+               "What is the significance of forming strategic partnerships for the development of Africa's critical minerals?"] 
+suggestion = st.selectbox("Or choose a suggestion", suggestions)
+if st.button("Ask"):
+    query = user_input or suggestion
+    # Generate response
+    response_completion = client.chat.completions.create(
+        model="gemma-7b-it",
+        messages=[
+            {
+                "role": "user",
+                "content": query
+            }
+        ],
+        temperature=1,
+        max_tokens=1024,
+        top_p=1,
+        stream=True,
+        stop=None,
+    )
+    response = ""
+    for chunk in response_completion:
+        response += chunk.choices[0].delta.content or ""
+    st.write("Chatbot: ", response)
