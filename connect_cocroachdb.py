@@ -1,10 +1,8 @@
 import os
-import psycopg2
+from sqlalchemy import create_engine, text
 
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
+engine = create_engine(os.environ["DATABASE_URL"])
+conn = engine.connect()
 
-with conn.cursor() as cur:
-    cur.execute("SELECT now()")
-    res = cur.fetchall()
-    conn.commit()
-    print(res)
+res = conn.execute(text("SELECT now()")).fetchall()
+print(res)
