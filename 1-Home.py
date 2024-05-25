@@ -14,11 +14,8 @@ doc_path = "documents\\critical-minerals-africa-senior-study-group-final-report.
 # Create Streamlit app
 st.title("Ultra-Fast Document Chatbot")
 st.header("Executive Summary")
-# Generate and display TLDR summary
-client = Groq(api_key="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")
 
 # Load the document content
-
 @st.cache_data
 def get_text_from_pdf(file_path):
     text = ""
