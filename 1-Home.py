@@ -27,7 +27,7 @@ def get_text_from_pdf(file_path):
 doc_content = get_text_from_pdf(doc_path)
 
 summary_completion = client.chat.completions.create(
-    model="gemma-7b-it",
+    model="gpt-3.5-turbo",
     messages=[
         {
             "role": "user",
@@ -66,7 +66,7 @@ if st.button("Ask"):
     query = user_input or suggestion
     # Generate response
     response_completion = client.chat.completions.create(
-        model="gemma-7b-it",
+        model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "user",
