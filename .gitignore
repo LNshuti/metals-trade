@@ -9,3 +9,4 @@ rag/_evaluations.json
 rag/rag_evaluator_pack/
 rag/benchmark.csv
 .streamlit/*
+.Rproj.user
