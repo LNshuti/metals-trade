@@ -3,7 +3,7 @@ import streamlit as st
 from streamlit_vizzu import Config, Data, Style, VizzuChart
 
 # Load the dataset
-df = pd.read_csv("data/Where did Africa export Metals to in 2021_.csv")
+df = pd.read_csv("data/Africa_export_Metals_2021_.csv")
 
 # Rename Name to Country
 df.rename(columns={'Name': 'Country'}, inplace=True)

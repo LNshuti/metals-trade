@@ -8,3 +8,8 @@ streamlit-vizzu>=0.1.5
 st-pages
 pandas
 nemoguardrails
+pdf2image 
+pillow 
+pytesseract 
+transformers
+llama-index

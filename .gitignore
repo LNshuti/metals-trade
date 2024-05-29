@@ -9,8 +9,9 @@ rag/_evaluations.json
 rag/rag_evaluator_pack/
 rag/benchmark.csv
 .streamlit/*
-<<<<<<< HEAD
 .Rproj.user
-=======
 huggingface_app.py
->>>>>>> a5f3bad (ignore hface init)
+cog.yaml
+predict.py
+src/*
+__pycache__/*
