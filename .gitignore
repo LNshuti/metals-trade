@@ -15,3 +15,4 @@ cog.yaml
 predict.py
 src/*
 __pycache__/*
+modal_notebook.py
