@@ -16,3 +16,5 @@ predict.py
 src/*
 __pycache__/*
 modal_notebook.py
+notebooks/create_finetuning_dataset.ipynb
+notebooks/create_qa_dataset.ipynb
