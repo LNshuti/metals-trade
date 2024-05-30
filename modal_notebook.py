@@ -8,8 +8,11 @@
 # especially useful for exploring the contents of Modal Volumes.
 # This uses [Modal Tunnels](https://modal.com/docs/guide/tunnels#tunnels-beta)
 # to create a tunnel between the running Jupyter instance and the internet.
-#
-# If you want to your Jupyter notebook to run _locally_ and execute remote Modal Functions in certain cells, see the `basic.ipynb` example :)
+
+# Use `modal run jupyter_inside_modal.py` will to start
+# the Juypter server at an address like https://u35iiiyqp5klbs.r3.modal.host.
+# Visit this address in your browser, and enter the security token
+# you set for `JUPYTER_TOKEN`.
 
 import os
 import subprocess
@@ -20,15 +23,13 @@ import modal
 app = modal.App(
     image=modal.Image.debian_slim().pip_install(
         "jupyter", "bing-image-downloader~=1.1.2"
-    )  # Note: prior to April 2024, "app" was called "stub"
 )
 volume = modal.Volume.from_name(
     "modal-examples-jupyter-inside-modal-data", create_if_missing=True
 )
 
 CACHE_DIR = "/root/cache"
-JUPYTER_TOKEN = "1234"  # Change me to something non-guessable!
-
+JUPYTER_TOKEN = "652328412"  
 
 @app.function(volumes={CACHE_DIR: volume})
 def seed_volume():
@@ -48,11 +49,10 @@ def seed_volume():
     volume.commit()
 
 
-# This is all that's needed to create a long-lived Jupyter server process in Modal
-# that you can access in your Browser through a secure network tunnel.
+# Create a long-lived Jupyter server process in Modal accessible
+# in the Browser through a secure network tunnel.
 # This can be useful when you want to interactively engage with Volume contents
 # without having to download it to your host computer.
-
 
 @app.function(concurrency_limit=1, volumes={CACHE_DIR: volume}, timeout=1_500)
 def run_jupyter(timeout: int):
@@ -91,9 +91,3 @@ def main(timeout: int = 10_000):
     seed_volume.remote()
     # Run the Jupyter Notebook server
     run_jupyter.remote(timeout=timeout)
-
-
-# Doing `modal run jupyter_inside_modal.py` will run a Modal app which starts
-# the Juypter server at an address like https://u35iiiyqp5klbs.r3.modal.host.
-# Visit this address in your browser, and enter the security token
-# you set for `JUPYTER_TOKEN`.
