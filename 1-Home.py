@@ -4,7 +4,10 @@ import pdfplumber
 import os 
 
 api_key = os.getenv("GROQ_API_KEY")
-
+hf_token = os.getenv("hf_token")
+openai_api_key = os.getenv("OPENAI_API_KEY")
+langchain_endpoint = os.getenv("LANGCHAIN_ENDPOINT")
+langchain_api_key = os.getenv("LANGCHAIN_API_KEY")
 
 client = Groq(api_key=api_key)
 # import necessary libraries for colbert method
