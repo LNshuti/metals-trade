@@ -3,7 +3,7 @@ from groq import Groq
 import pdfplumber
 
 # Get the Groq API key from Streamlit secrets
-api_key = st.secrets["groq"]["GROQ_API_KEY"]
+api_key = st.secrets["GROQ_API_KEY"]
 
 client = Groq(api_key=api_key)
 # import necessary libraries for colbert method
