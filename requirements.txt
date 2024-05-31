@@ -13,3 +13,4 @@ pillow
 pytesseract 
 transformers
 llama-index
+groq
