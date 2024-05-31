@@ -10,7 +10,6 @@ langchain_endpoint = os.getenv("LANGCHAIN_ENDPOINT")
 langchain_api_key = os.getenv("LANGCHAIN_API_KEY")
 
 client = Groq(api_key=api_key)
-# import necessary libraries for colbert method
 
 # Load and convert document into embeddings
 doc_path = "documents\\critical-minerals-africa-senior-study-group-final-report.pdf"
